@@ -14,9 +14,12 @@ function src() {
   fi
 }
 
-# Run dotfiles script, then source.
-function dotfiles() {
-  ~/.dotfiles/bin/dotfiles "$@" && src
-}
-
-src
+if [ ! -f ~/.env.local ]; then
+	function e_bold()   { echo -e "\n\033[1m$@\033[0m"; }
+	echo ""
+	e_bold "Please copy ~/.dotfiles/.env.local.default to ~/.env.local and customize."
+	echo ""
+else
+	source ~/.env.local
+	src
+fi

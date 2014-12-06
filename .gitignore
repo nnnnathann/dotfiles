@@ -1,6 +1,3 @@
-caches/
-backups/
-link/.ssh/authorized_keys
-link/.ssh/id_*
-link/.ssh/known_hosts
-*LOCAL*
+.DS_Store
+caches/*
+!caches/.gitkeep
