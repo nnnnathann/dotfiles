@@ -15,23 +15,26 @@
   rb = rbranch
   rv = review
   st = status
+  fa = fetch --all
   ksdiff = difftool -y -t Kaleidoscope
+  ac = !"git add -A; git commit"
 [branch "master"]
   remote = origin
   merge = refs/heads/master
 [color]
   ui = auto
 [color "branch"]
-  current = yellow reverse
-  local = yellow
+  current = normal reverse
+  local = normal
   remote = green
 [color "diff"]
-  meta = yellow bold
-  frag = magenta bold
+  meta = normal bold
+  frag = cyan
+  whitespace = normal
   old = red bold
-  new = green bold
+  new = blue bold
 [color "status"]
-  added = yellow
+  added = normal
   changed = green
   untracked = cyan
 [merge]
@@ -54,3 +57,7 @@
   insteadOf = "gist:"
 [url "git@heroku.com:"]
   insteadOf = "heroku:"
+[push]
+  default = upstream
+[credential]
+  helper = osxkeychain

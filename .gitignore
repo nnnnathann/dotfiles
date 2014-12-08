@@ -1,3 +1,6 @@
 .DS_Store
+backups
+!backups/.gitkeep
 caches/*
 !caches/.gitkeep
+!caches/mysql/.gitkeep

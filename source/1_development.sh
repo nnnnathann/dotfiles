@@ -1,3 +1,3 @@
 #!/bin/bash
 
-alias subl="/Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text"
+alias subl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"

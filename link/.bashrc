@@ -1,7 +1,6 @@
 # Add binaries into the path
 PATH=~/.dotfiles/bin:$PATH
 export PATH
-
 # Source all files in ~/.dotfiles/source/
 function src() {
   local file
@@ -20,6 +19,8 @@ if [ ! -f ~/.env.local ]; then
 	e_bold "Please copy ~/.dotfiles/.env.local.default to ~/.env.local and customize."
 	echo ""
 else
+  boot2docker up > /dev/null 2>&1
+  $(boot2docker shellinit | grep "export") > /dev/null 2>&1
 	source ~/.env.local
 	src
 fi
