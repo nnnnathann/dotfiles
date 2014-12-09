@@ -1,5 +1,7 @@
 # Add binaries into the path
 PATH=~/.dotfiles/bin:$PATH
+PATH=/Users/nathanbleigh/development/tools/android-sdk-macosx/tools:$PATH
+PATH=/Users/nathanbleigh/development/tools/android-sdk-macosx/platform-tools:$PATH
 export PATH
 # Source all files in ~/.dotfiles/source/
 function src() {
