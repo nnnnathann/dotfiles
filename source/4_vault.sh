@@ -47,3 +47,11 @@ function vault_read() {
 	echo "${!var}"
 	vault_dismount
 }
+
+function vault_read_trim {
+	vault_read "$@" | cut -f3 -d' ' | tr -d '\n'
+}
+
+function vault_copy {
+	vault_read "$@" | cut -f3 -d' ' | tr -d '\n' | pbcopy
+}

@@ -27,14 +27,30 @@ function sync_database {
   import_database "$1"
 }
 
-function import_database {
+function mysql_drop {
   mysqladmin -f -u$MYSQL_USER --password=$MYSQL_PASS --host $MYSQL_HOST drop $1 > /dev/null 2>&1
-  # if [ -d "$LOCAL_DATA_DIR/$1" ]; then
-  #   echo "Removing $LOCAL_DATA_DIR/$1"
-  #   sudo rm -rf "$LOCAL_DATA_DIR/$1"
-  # fi
+}
+
+function mysql_create {
   mysqladmin -f -u$MYSQL_USER --password=$MYSQL_PASS --host $MYSQL_HOST create $1 > /dev/null 2>&1
-  mysql_import $1 $LOCAL_DUMPS/$1.sql
+}
+
+function import_database {
+  mysql_drop $1
+  mysql_create $1
+  db_file=$LOCAL_DUMPS/$1.sql
+  if [ ! -z "$2" ]; then
+    db_file=$(abs $2)
+  fi
+  echo "Importing file: $db_file into $1"
+  mysql_import $1 $db_file
+}
+
+function import_sql {
+  local filename=$(basename "$1")
+  local extension="${filename##*.}"
+  filename="${filename%.*}"
+  mysqladmin -f -u$MYSQL_USER --password=$MYSQL_PASS --host $MYSQL_HOST drop $1 
 }
 
 function sync_databases {
@@ -60,4 +76,7 @@ function sync_satisfaction {
 }
 function sync_compliance {
   sync_database 'QuestionnaireCompliance_demo'
+}
+function sync_edu {
+  sync_database "riedu"
 }

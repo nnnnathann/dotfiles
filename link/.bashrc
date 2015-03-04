@@ -1,7 +1,9 @@
 # Add binaries into the path
+export GOPATH=$HOME/development/golang
 PATH=~/.dotfiles/bin:$PATH
-PATH=/Users/nathanbleigh/development/tools/android-sdk-macosx/tools:$PATH
-PATH=/Users/nathanbleigh/development/tools/android-sdk-macosx/platform-tools:$PATH
+PATH=$HOME/development/tools/android-sdk-macosx/tools:$PATH
+PATH=$HOME/development/tools/android-sdk-macosx/platform-tools:$PATH
+PATH=$PATH:$GOPATH/bin
 export PATH
 # Source all files in ~/.dotfiles/source/
 function src() {
@@ -21,8 +23,8 @@ if [ ! -f ~/.env.local ]; then
 	e_bold "Please copy ~/.dotfiles/.env.local.default to ~/.env.local and customize."
 	echo ""
 else
-  boot2docker up > /dev/null 2>&1
+  boot2docker up -m 4096 > /dev/null 2>&1
   $(boot2docker shellinit | grep "export") > /dev/null 2>&1
 	source ~/.env.local
-	src
+  src
 fi
