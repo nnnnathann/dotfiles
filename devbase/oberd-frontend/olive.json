@@ -1,0 +1,11 @@
+{
+    "auth": false,
+    "services": {
+        "login": {
+            "url": "{oberd:login}/api"
+        },
+        "cpanel": {
+            "url": "{oberd:cpanel}/api"
+        }
+    }
+}

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cp -R ~/.dotfiles/devbase/oberd-frontend/* .
+cp ~/.dotfiles/devbase/oberd-frontend/.npmrc .
+cp ~/.dotfiles/devbase/oberd-frontend/.gitignore .
+cp ~/.dotfiles/devbase/oberd-frontend/.eslintrc .
+cp ~/.dotfiles/devbase/oberd-frontend/.env.local .
+cp ~/.dotfiles/devbase/oberd-frontend/.eslintignore .
+cp ~/.dotfiles/devbase/oberd-frontend/.editorconfig .
+npm install && jspm install

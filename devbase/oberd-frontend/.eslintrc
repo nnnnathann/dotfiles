@@ -1,50 +1,3 @@
-#!/bin/bash
-
-# Editor Config
-if [ ! -f .editorconfig ]; then
-cat << EOF > .editorconfig 
-# http://editorconfig.org
-root = true
-
-[*]
-indent_style = space
-indent_size = 4
-end_of_line = lf
-charset = utf-8
-trim_trailing_whitespace = true
-insert_final_newline = true
-
-[*.md]
-trim_trailing_whitespace = false
-
-EOF
-fi
-
-# git ignore
-
-if [ ! -f .gitignore ]; then
-cat << EOF > .gitignore
-node_modules
-vendor
-.DS_Store
-EOF
-fi
-
-
-## eslint ignore
-if [ ! -f .eslintignore ]; then
-cat << EOF > .eslintignore
-node_modules
-dist
-src/jspm_packages
-_tmp
-EOF
-fi
-
-## eslintrc
-#
-if [ ! -f .eslintrc ]; then
-cat << EOF > .eslintrc
 {
   "parser": "babel-eslint",
   "plugins": [
@@ -258,5 +211,3 @@ cat << EOF > .eslintrc
     }]
   }
 }
-EOF
-fi

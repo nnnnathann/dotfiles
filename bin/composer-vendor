@@ -1,0 +1,26 @@
+#!/bin/bash
+
+package=$1
+version=${2:-"dev-master"}
+
+mkdir -p ~/tmp/composer/$package
+
+pushd ~/tmp/composer/$package
+
+read -d '' json << EOF
+{
+  "require": {
+    "$package": "$version"
+  },
+  "prefer-dist": true,
+  "minimum-stability": "dev"
+}
+EOF
+
+echo $json > composer.json
+
+docker run -it --rm -v $(pwd):/working -w /working quay.io/nnnnathann/apache-php php /usr/local/bin/composer.phar install --prefer-dist
+docker run -it --rm -v $(pwd):/working -w /working quay.io/nnnnathann/apache-php php /usr/local/bin/composer.phar dump-autoload
+
+echo "Package dumped to"
+echo "~/tmp/composer/$package"

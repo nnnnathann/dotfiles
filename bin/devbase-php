@@ -1,0 +1,5 @@
+#!/bin/bash
+
+. ~/.dotfiles/bin/devbase
+
+cp -R ~/.dotfiles/devbase/php/* .

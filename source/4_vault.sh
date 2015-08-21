@@ -15,6 +15,10 @@ function vault_mount() {
 		hdiutil attach $VAULT_FILE > /dev/null
 	fi
 }
+function vault_edit() {
+	vault_mount
+	subl /Volumes/Vault
+}
 
 function vault_dismount() {
 	local mount_dir=$(get_mount_dir)

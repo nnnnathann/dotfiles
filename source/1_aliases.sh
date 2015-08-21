@@ -6,27 +6,18 @@ function docker_alias {
 	docker run -it --rm -v $(pwd):/working -w /working $img $@
 }
 
-function mysqladmin {
-	docker run -it --rm --entrypoint=mysqladmin -v $(pwd):/working -w /working mysql:5.6 $@
-}
-
-function mysql {
-	docker run -it --rm --entrypoint=mysql -v $(pwd):/working -w /working mysql:5.6 $@
-}
-
-function mysqldump {
-	docker run -it --rm --entrypoint=mysqldump -v $(pwd):/working -w /working mysql:5.6 $@
+function mysqldump_container {
+  container=$1
+  shift
+  docker run -it --rm --link=$container:db -v $(pwd):/working -w /working mysql-dump $@
 }
 
 function subl {
   /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl
 }
 
-function php {
-  docker_alias php-cli $@
-}
 function composer {
-  docker_alias composer $@
+  docker run -it --rm -v ~/.dotfiles/caches/composer:/composer_cache -v ~/.dotfiles/caches/composer_home:/composer_home -v $(pwd):/working -w /working -e COMPOSER_CACHE_DIR=/composer_cache -e COMPOSER_HOME=/composer_home composer "$@"
 }
 
 function convert {
@@ -52,17 +43,30 @@ function build_edu {
 
 function deploy_edu_demo {
   build_edu
-  grunt exec:deploy_demo
+  grunt exec:deploy_demo --force
 }
 
 function deploy_edu_prod {
   build_edu
-  grunt exec:deploy
+  grunt exec:deploy --force
 }
 
 function etcdapps {
   ETCDCTL_PEERS="http://10.210.132.38:4001" etcdctl $@
 }
+
+function oberd_migrate {
+  docker exec oberd_web_1 /bin/sh -c "cd database/migrations && ./migrate $@"
+}
+
+function copy_ssh {
+  mkdir ssh
+  cp ~/.ssh/id_ursadmin ssh/id_rsa
+  cp ~/.ssh/id_ursadmin.pub ssh/id_rsa.pub
+  cp ~/.ssh/known_hosts ssh/known_hosts
+}
+
+alias start_redis="docker run -d -p 6379:6379 --name=redis redis"
 
 alias oberd="z oberd && subl ."
 
@@ -70,6 +74,7 @@ alias npmi="npm install --save"
 alias npmid="npm install --save-dev"
 alias gulp="./node_modules/.bin/gulp"
 
+alias build_custom_css="compass compile --output-style compressed --no-line-comments --sass-dir form_public/pages/css/custom/v2/scss --css-dir form_public/pages/css/custom/v2"
 alias build_custom="compass compile --output-style compressed --no-line-comments --sass-dir form_public/pages/css/custom/v2/scss --css-dir form_public/pages/css/custom/v2 && grunt build:custom --force"
 alias build_cpanel="compass compile --sass-dir cpanel_public/pages/css/routed/scss --css-dir cpanel_public/pages/css/routed/compiled"
 
