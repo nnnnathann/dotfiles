@@ -25,9 +25,6 @@ if [ ! -f ~/.env.local ]; then
 	e_bold "Please copy ~/.dotfiles/.env.local.default to ~/.env.local and customize."
 	echo ""
 else
-  pushd "$VAGRANT_BOOT2DOCKER" > /dev/null
-  vagrant up > /dev/null 2> /dev/null
-  popd > /dev/null
   source ~/.env.local
   src
 fi

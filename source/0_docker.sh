@@ -14,3 +14,8 @@ function docker-tunnel {
   vagrant ssh -c 'ssh -i ~/.ssh/id_ursreg root@10.210.69.43 -f -N -L 5000:localhost:5000'
   popd
 }
+
+function docker-fix-vpn {
+  sudo route -n delete -net 192.168.99 -interface utun0
+  sudo route -n add -net 192.168.99.0/24 -interface vboxnet3 
+}

@@ -1,33 +1,38 @@
 #!/bin/bash
-
-#!/bin/bash
 function vpn-connect {
 /usr/bin/env osascript <<-EOF
+set vpn_name to "'Rackspace'"
+set user_name to "urs_ord_2"
+set otp_token to "$1"
 tell application "System Events"
-        tell current location of network preferences
-                set VPN to service "Rackspace" -- your VPN name here
-                if exists VPN then connect VPN
-                repeat while (current configuration of VPN is not connected)
-                    delay 1
-                end repeat
-        end tell
+        set rc to do shell script "scutil --nc status " & vpn_name
+        if rc starts with "Connected" then
+            do shell script "scutil --nc stop " & vpn_name
+        else
+            do shell script "scutil --nc start " & vpn_name
+            delay 2
+            keystroke otp_token
+            keystroke return
+        end if
 end tell
 EOF
 }
 
 function vpn-disconnect {
 /usr/bin/env osascript <<-EOF
+set vpn_name to "'Rackspace'"
+set user_name to "urs_ord_2"
 tell application "System Events"
-        tell current location of network preferences
-                set VPN to service "Rackspace" -- your VPN name here
-                if exists VPN then disconnect VPN
-        end tell
+        set rc to do shell script "scutil --nc status " & vpn_name
+        if rc starts with "Connected" then
+            do shell script "scutil --nc stop " & vpn_name
+        end if
 end tell
 return
 EOF
 }
 
 function vpn() {
-	vault_read "vpn_setup" "password" | tr -d '\n' | pbcopy
-	vpn-connect
+	PASSWORD=$(vault_read "vpn_setup" "password" | tr -d '\n')
+	vpn-connect $PASSWORD
 }

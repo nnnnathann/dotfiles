@@ -66,6 +66,14 @@ function copy_ssh {
   cp ~/.ssh/known_hosts ssh/known_hosts
 }
 
+function de {
+  echo "Linking docker to oberd environment"
+  export VAGRANT_BOOT2DOCKER_IP="$(docker-machine ip oberd)"
+  export DOCKER_HOST_IP="$(docker-machine ip oberd)"
+  export ETCDCTL_PEERS="http://$(docker-machine ip oberd):5001"
+  eval $(docker-machine env oberd)
+}
+
 alias start_redis="docker run -d -p 6379:6379 --name=redis redis"
 
 alias oberd="z oberd && subl ."
@@ -78,3 +86,6 @@ alias build_custom_css="compass compile --output-style compressed --no-line-comm
 alias build_custom="compass compile --output-style compressed --no-line-comments --sass-dir form_public/pages/css/custom/v2/scss --css-dir form_public/pages/css/custom/v2 && grunt build:custom --force"
 alias build_cpanel="compass compile --sass-dir cpanel_public/pages/css/routed/scss --css-dir cpanel_public/pages/css/routed/compiled"
 
+alias oberd_bash="docker exec -it oberd_web_1 /bin/bash"
+
+alias npm_patch='VERSION=$(npm version patch) && npm publish && git push origin $VERSION'

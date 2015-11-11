@@ -15,7 +15,7 @@ function mysql_import {
   container=$1
   schema=$2
   file=$3
-  docker run -it --rm --link=$container:db -v "$file":/tmp.sql mysql-console $schema "< /tmp.sql"
+  docker run -it --rm --link=$container:db -v "$file":/tmp.sql quay.io/nnnnathann/mysql-console $schema "< /tmp.sql"
 }
 
 function sync_database {
@@ -68,7 +68,7 @@ function sync_databases {
   container=$1
   shift
   for DB in "$@"; do
-    sync_database $DB
+    sync_database $container $DB
   done
 }
 
