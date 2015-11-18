@@ -4,6 +4,7 @@ PATH=~/.dotfiles/bin:$PATH
 PATH=$HOME/development/tools/android-sdk-macosx/tools:$PATH
 PATH=$HOME/development/tools/android-sdk-macosx/platform-tools:$PATH
 PATH=$PATH:$GOPATH/bin
+PATH=$PATH:/usr/local/sbin
 export PATH
 
 VAGRANT_BOOT2DOCKER="/Users/nathan/development/local/boot2docker-vagrant"
