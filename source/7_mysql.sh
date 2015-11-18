@@ -8,6 +8,12 @@ source ~/.env.local
 REMOTE_DUMPS="/home/$OBERD_DB_SSH_USER/data_export/dumps"
 LOCAL_DUMPS="$HOME/.dotfiles/caches/mysql"
 
+function mysqldump_container {
+  container=$1
+  shift
+  docker run -it --rm --link=$container:db -v $(pwd):/working -w /working mysql-dump $@
+}
+
 # Usage:
 #   mysql_import [container_name] [database_schema] [file]
 

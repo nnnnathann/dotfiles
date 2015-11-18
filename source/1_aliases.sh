@@ -6,12 +6,6 @@ function docker_alias {
 	docker run -it --rm -v $(pwd):/working -w /working $img $@
 }
 
-function mysqldump_container {
-  container=$1
-  shift
-  docker run -it --rm --link=$container:db -v $(pwd):/working -w /working mysql-dump $@
-}
-
 function subl {
   /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl
 }
