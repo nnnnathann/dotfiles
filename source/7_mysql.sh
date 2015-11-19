@@ -11,7 +11,7 @@ LOCAL_DUMPS="$HOME/.dotfiles/caches/mysql"
 function mysqldump_container {
   container=$1
   shift
-  docker run -it --rm --link=$container:db -v $(pwd):/working -w /working mysql-dump $@
+  docker run -it --rm --link=$container:db -v $(pwd):/working -w /working oberd/mysql-dump $@
 }
 
 # Usage:
