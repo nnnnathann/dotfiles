@@ -21,7 +21,7 @@ function mysql_import {
   container=$1
   schema=$2
   file=$3
-  docker run -it --rm --link=$container:db -v "$file":/tmp.sql quay.io/nnnnathann/mysql-console $schema "< /tmp.sql"
+  docker run -it --rm --link=$container:db -v "$file":/tmp.sql oberd/mysql-console $schema "< /tmp.sql"
 }
 
 function sync_database {
@@ -39,14 +39,14 @@ function mysql_drop {
   container=$1
   schema=$2
   echo "Dropping $schema from $container"
-  docker run -it --rm --link=$container:db mysql-console mysqladmin -f drop $schema > /dev/null 2>&1
+  docker run -it --rm --link=$container:db oberd/mysql-console mysqladmin -f drop $schema > /dev/null 2>&1
 }
 
 function mysql_create {
   container=$1
   schema=$2
   echo "Creating $schema in $container"
-  docker run -it --rm --link=$container:db mysql-console mysqladmin -f create $schema > /dev/null 2>&1
+  docker run -it --rm --link=$container:db oberd/mysql-console mysqladmin -f create $schema > /dev/null 2>&1
 }
 
 function import_database {
