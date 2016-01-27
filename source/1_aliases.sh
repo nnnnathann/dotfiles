@@ -68,6 +68,14 @@ function de {
   eval $(docker-machine env oberd)
 }
 
+function de_carina {
+  CLUSTER=${1:-boatie}
+  if [ ! -d "/tmp/$CLUSTER" ]; then
+    carina credentials --path "/tmp/$CLUSTER" $CLUSTER
+  fi
+  source "/tmp/$CLUSTER/docker.env"
+}
+
 alias start_redis="docker run -d -p 6379:6379 --name=redis redis"
 
 alias oberd="z oberd && subl ."
