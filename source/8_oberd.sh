@@ -24,8 +24,16 @@ function oberd_import_test_schema {
   import_database oberd_db_1 OBERDDevice_test tests/current_device_schema.sql
 }
 
+function ps_update_test_schema {
+  dump_schema_to_sql oberd_db_1 patientsatisfaction_demo db/current_schema.sql
+}
+
+function ps_import_test_schema {
+  import_database oberd_db_1 patientsatisfaction_test db/current_schema.sql
+}
+
 function oberd_test {
-  docker exec  oberd_web_1 /bin/bash -c "cd /var/www/tests && php lib/phpunit/bin/phpunit --testsuite=$1"
+  docker exec  oberd_web_1 /bin/bash -c "cd /var/www/tests && php ../vendor/bin/phpunit --testsuite=$1"
 }
 
 function oberd_browser {

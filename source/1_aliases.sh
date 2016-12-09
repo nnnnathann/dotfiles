@@ -11,7 +11,7 @@ function subl {
 }
 
 function composer {
-  docker run -it --rm -v ~/.dotfiles/caches/composer:/composer_cache -v ~/.dotfiles/caches/composer_home:/composer_home -v $(pwd):/working -w /working -e COMPOSER_CACHE_DIR=/composer_cache -e COMPOSER_HOME=/composer_home composer "$@"
+  docker run -it --rm --privileged --memory "4g" -v ~/.dotfiles/caches/composer:/composer_cache -v ~/.dotfiles/caches/composer_home:/composer_home -v $(pwd):/working -w /working -e COMPOSER_CACHE_DIR=/composer_cache -e COMPOSER_HOME=/composer_home oberd/composer "$@"
 }
 
 function convert {
@@ -27,6 +27,11 @@ function compass {
 
 function sass {
   docker run -it --rm -v $(pwd):/working -w /working --entrypoint=sass attensee/compass $@
+}
+
+function edu_sass {
+  sass --update "app/webroot/css/sass":"app/webroot/css/compiled"
+  compass compile --output-style compressed --no-line-comments --relative-assets --images-dir app/webroot/img --sass-dir app/webroot/css/compass --css-dir app/webroot/css/compiled
 }
 
 function build_edu {
@@ -50,7 +55,7 @@ function etcdapps {
 }
 
 function oberd_migrate {
-  docker exec oberd_web_1 /bin/sh -c "cd database/migrations && ./migrate $@"
+  docker exec -it oberd_web_1 "SILENT=true /var/www/database/migrations/migrate up"
 }
 
 function copy_ssh {
@@ -68,6 +73,11 @@ function de {
   eval $(docker-machine env oberd)
 }
 
+function rs {
+  main=${1:-web}
+  docker-compose kill $main && docker-compose rm -f $main && docker-compose up -d
+}
+
 function de_carina {
   CLUSTER=${1:-boatie}
   if [ ! -d "/tmp/$CLUSTER" ]; then
@@ -75,6 +85,8 @@ function de_carina {
   fi
   source "/tmp/$CLUSTER/docker.env"
 }
+
+alias wifi="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
 
 alias start_redis="docker run -d -p 6379:6379 --name=redis redis"
 
@@ -87,6 +99,7 @@ alias gulp="./node_modules/.bin/gulp"
 alias build_custom_css="compass compile --output-style compressed --no-line-comments --sass-dir form_public/pages/css/custom/v2/scss --css-dir form_public/pages/css/custom/v2"
 alias build_custom="compass compile --output-style compressed --no-line-comments --sass-dir form_public/pages/css/custom/v2/scss --css-dir form_public/pages/css/custom/v2 && grunt build:custom --force"
 alias build_cpanel="compass compile --sass-dir cpanel_public/pages/css/routed/scss --css-dir cpanel_public/pages/css/routed/compiled"
+alias watch_cpanel="compass watch --sass-dir cpanel_public/pages/css/routed/scss --css-dir cpanel_public/pages/css/routed/compiled"
 
 alias oberd_bash="docker exec -it oberd_web_1 /bin/bash"
 

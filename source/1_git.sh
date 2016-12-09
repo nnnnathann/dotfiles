@@ -59,7 +59,7 @@ function clean_local(){
     esac
   else
     for b in $dead; do
-      if [ "$b" != "master" ]; then
+      if [ "$b" != "master" && "$b" != "develop" ]; then
         git branch -D $b
       fi
     done
@@ -81,7 +81,7 @@ function clean_github(){
   merged=$(git branch -a --merged master | grep "remotes/origin" | cut -f3-100 -d'/')
   if [ -z "$1" ]; then
     for b in $merged; do
-      if [ "$b" != "master" ]; then
+      if [ "$b" != "master" && "$b" != "develop" ]; then
         echo "will delete $b on github"
       fi
     done
@@ -92,7 +92,7 @@ function clean_github(){
     esac
   else
     for b in $merged; do
-      if [ "$b" != "master" ]; then
+      if [ "$b" != "master" && "$b" != "develop" ]; then
         git push origin :$b
         echo "deleted $b on github"
       fi

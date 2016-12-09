@@ -83,7 +83,7 @@ function sync_demo {
   mkdir -p $LOCAL_DUMPS > /dev/null 2>&1
   
   # # # Sync up the main schema
-  sync_database oberd_db_1 $SCHEMA
+  # sync_database oberd_db_1 $SCHEMA
 
   # # # Sync up all other databases prefixed with the prefix
   PREFIXED_DBS=`ssh $OBERD_DB_SSH_USER@$OBERD_DB_SERVER "mysql -u $OBERD_DB_USER --password='$OBERD_DB_PASS' -e 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME LIKE \"$PREFIX%\"'" | grep ^$PREFIX | xargs`
