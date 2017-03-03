@@ -2,6 +2,7 @@
   autocrlf = input
   whitespace = fix,space-before-tab,tab-in-indent,trailing-space
   excludesfile = ~/.gitignore_global
+  pager = diff-so-fancy | less --tabs=4 -RFX
 [apply]
   whitespace = fix
 [alias]
@@ -32,7 +33,7 @@
   frag = cyan
   whitespace = normal
   old = red bold
-  new = blue bold
+  new = green normal
 [color "status"]
   added = normal
   changed = green
@@ -61,3 +62,6 @@
   default = upstream
 [credential]
   helper = osxkeychain
+[user]
+  name = "Nathan Bleigh"
+  email = "nathan.bleigh@gmail.com"

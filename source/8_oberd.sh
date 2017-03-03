@@ -13,32 +13,32 @@ function dump_schema_to_sql {
 
 function oberd_update_test_schema {
   cd "$OBERD_DIR"
-  dump_schema_to_sql oberd_db_1 medadatonline_demo tests/current_schema.sql
-  dump_schema_to_sql oberd_db_1 demo_InstitutionURS tests/current_institution_schema.sql
+  dump_schema_to_sql oberddocker_mysql_1 medadatonline_demo tests/current_schema.sql
+  dump_schema_to_sql oberddocker_mysql_1 demo_InstitutionURS tests/current_institution_schema.sql
 }
 
 function oberd_import_test_schema {
   cd "$OBERD_DIR"
-  import_database oberd_db_1 medadatonline_test tests/current_schema.sql
-  import_database oberd_db_1 test_InstitutionFixture tests/current_institution_schema.sql
-  import_database oberd_db_1 OBERDDevice_test tests/current_device_schema.sql
+  import_database oberddocker_mysql_1 medadatonline_test tests/current_schema.sql
+  import_database oberddocker_mysql_1 test_InstitutionFixture tests/current_institution_schema.sql
+  import_database oberddocker_mysql_1 OBERDDevice_test tests/current_device_schema.sql
 }
 
 function ps_update_test_schema {
-  dump_schema_to_sql oberd_db_1 patientsatisfaction_demo db/current_schema.sql
+  dump_schema_to_sql oberddocker_mysql_1 patientsatisfaction_demo db/current_schema.sql
 }
 
 function ps_import_test_schema {
-  import_database oberd_db_1 patientsatisfaction_test db/current_schema.sql
+  import_database oberddocker_mysql_1 patientsatisfaction_test db/current_schema.sql
 }
 
 function oberd_test {
-  docker exec  oberd_web_1 /bin/bash -c "cd /var/www/tests && php ../vendor/bin/phpunit --testsuite=$1"
+  docker exec  oberddocker_oberd_1 /bin/bash -c "cd /var/www/tests && php ../vendor/bin/phpunit --testsuite=$1"
 }
 
 function oberd_browser {
-  docker exec oberd_web_1 /bin/bash -c 'php -d error_reporting="E_ALL&~E_WARNING&~E_NOTICE&~E_STRICT" tests/lib/phpunit/bin/paratest -p 2 -f --phpunit=tests/lib/phpunit/bin/phpunit -c tests/browser/phpunit.xml --testsuite="browser"'
+  docker exec oberddocker_oberd_1 /bin/bash -c 'php -d error_reporting="E_ALL&~E_WARNING&~E_NOTICE&~E_STRICT" tests/lib/phpunit/bin/paratest -p 2 -f --phpunit=tests/lib/phpunit/bin/phpunit -c tests/browser/phpunit.xml --testsuite="browser"'
 }
 function oberd_browser_single {
-  docker exec oberd_web_1 /bin/bash -c 'php -d error_reporting="E_ALL&~E_WARNING&~E_NOTICE&~E_STRICT" tests/lib/phpunit/bin/phpunit -c tests/browser/phpunit.xml --testsuite="browser"'
+  docker exec oberddocker_oberd_1 /bin/bash -c 'php -d error_reporting="E_ALL&~E_WARNING&~E_NOTICE&~E_STRICT" tests/lib/phpunit/bin/phpunit -c tests/browser/phpunit.xml --testsuite="browser"'
 }

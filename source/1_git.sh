@@ -10,7 +10,7 @@ alias gl='git log'
 alias gg='gl --decorate --oneline --graph --date-order --all'
 alias gs='git status'
 alias gst='gs'
-alias gd='git diff'
+alias gd='git diff --color | diff-so-fancy'
 alias gdc='gd --cached'
 alias gm='git commit -m'
 alias gma='git commit -am'
@@ -205,3 +205,12 @@ if [[ "$OSTYPE" =~ ^darwin ]]; then
   alias gdkc='gdk --cached'
   alias gt='gittower "$(git rev-parse --show-toplevel)"'
 fi
+
+# example: gitmerge develop fix/whatever
+function gitmerge() {
+  base=$1
+  target=$2
+  gitup $2
+  gitup $1
+  git merge $2
+}

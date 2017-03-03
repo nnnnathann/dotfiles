@@ -54,9 +54,10 @@ function etcdapps {
   ETCDCTL_PEERS="http://10.210.132.38:4001" etcdctl $@
 }
 
-function oberd_migrate {
-  docker exec -it oberd_web_1 "SILENT=true /var/www/database/migrations/migrate up"
-}
+# function oberd_migrate {
+#   docker exec -it oberddocker_oberd_1 /bin/bash -c "SILENT=true php /var/www/database/migrations/migrate.php "$@""
+# }
+alias oberd_migrate='docker exec -it oberddocker_oberd_1 /bin/bash -c "SILENT=true php /var/www/database/migrations/migrate.php"'
 
 function copy_ssh {
   mkdir ssh
@@ -75,7 +76,7 @@ function de {
 
 function rs {
   main=${1:-web}
-  docker-compose kill $main && docker-compose rm -f $main && docker-compose up -d
+  docker-compose kill $main && docker-compose rm -f $main && docker-compose up -d $main
 }
 
 function de_carina {
