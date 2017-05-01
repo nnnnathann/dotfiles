@@ -11,11 +11,11 @@ function aws-push {
   repository=${2:-oberd/oberd}
   app=${3:-oberd}
   if [ -z "$commitId" ]; then
-    echo "Invalid commit"
+    echo "Invalid commit, are you in OBERD directory?"
     return
   fi
   if [ -z "$branch" ]; then
-    echo "Invalid branch"
+    echo "Invalid branch, are you in OBERD directory?"
     return
   fi
   if [ -z "$deployGroup" ]; then
@@ -23,5 +23,80 @@ function aws-push {
     return
   fi
   gitpu
-  aws deploy create-deployment --application-name oberd --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $deployGroup --github-location repository=$repository,commitId=$commitId
+  aws deploy create-deployment --application-name $app --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $deployGroup --github-location repository=$repository,commitId=$commitId
+}
+
+function aws-medamine-deploy-current-commit {
+  aws-push medamine2
+}
+
+function aws-qa-deploy-current-commit {
+  aws-push qa
+}
+
+# Usage:
+# upload_oberd_file [autoscale-group] [oberd_relative_filepath]
+
+# Example:
+# upload_oberd_file medamine-autoscale business/Session.php
+
+# Will upload a file to all the servers currently in the
+# medamine-autoscale groupName in AWS
+
+# Group names for Oberd deploys:
+
+# medamine2 = medamine-autoscale
+# qa = oberd-qa-autoscale
+# 
+function upload_oberd_file {
+
+read -r -d '' USAGE << EOF
+
+Usage:
+upload_oberd_file [autoscale-group] [oberd_relative_filepath]
+
+Example:
+upload_oberd_file medamine-autoscale business/Session.php
+
+Will upload a file to all the servers currently in the
+medamine-autoscale groupName in AWS
+
+Group names for Oberd deploys:
+
+medamine2 = medamine-autoscale
+qa = oberd-qa-autoscale
+
+EOF
+
+  servers=$(aws ec2 describe-instances \
+  --region us-west-2 \
+  --filters "Name=tag:aws:autoscaling:groupName,Values=$1" \
+  --query 'Reservations[].Instances[].PublicDnsName' \
+  --output text)
+
+  file="$OBERD_DIR/$2"
+
+  if [ -z "$servers" ]; then
+    echo "No servers found"
+    echo "$USAGE"
+    return
+  fi
+
+  if [ ! -f "$file" ]; then
+    echo "File '$file' does not exist"
+    echo "$USAGE"
+    return
+  fi
+
+  for server in $servers; do
+    echo "Will copy $file to $server:/var/www/oberd/$2"
+  done
+
+  read -p "Are you sure? " -n 1 -r
+  echo    # (optional) move to a new line
+  if [[ $REPLY =~ ^[Yy]$ ]]
+  then
+      scp -i ~/.ssh/oberd.pem "$file" "ec2-user@$server:/var/www/oberd/$2"
+  fi
+  echo "Copied files successfully."
 }

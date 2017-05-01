@@ -208,9 +208,36 @@ fi
 
 # example: gitmerge develop fix/whatever
 function gitmerge() {
+  if [ "$#" -ne 2 ]; then
+      echo "usage: gitmerge master hotfix/whatever"
+      exit
+  fi
   base=$1
   target=$2
   gitup $2
   gitup $1
   git merge $2
+}
+
+
+function get_pr_branch {
+  number=$@
+  for num in $number; do
+    branch=$(curl -s -H "Authorization: token $GITHUB_OAUTH_TOKEN" https://api.github.com/repos/oberd/OBERD/pulls/$num | jq -r '.head.ref')
+    echo "$num $branch"
+  done
+}
+
+function create_oberd_release {
+  gitup develop
+  branches=$(get_pr_branch "$@" | awk '{print $2}')
+  for branch in $branches; do
+    echo "Updating $branch"
+    gitup "$branch"
+  done
+  gitup develop
+  echo "Merge Commands:"
+  for branch in $branches; do
+    echo "git merge $branch"
+  done
 }
