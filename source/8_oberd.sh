@@ -42,3 +42,16 @@ function oberd_browser {
 function oberd_browser_single {
   docker exec oberddocker_oberd_1 /bin/bash -c 'php -d error_reporting="E_ALL&~E_WARNING&~E_NOTICE&~E_STRICT" tests/lib/phpunit/bin/phpunit -c tests/browser/phpunit.xml --testsuite="browser"'
 }
+
+function odc {
+  docker_dir="$(dirname $OBERD_DIR)/oberd-docker"
+  docker-compose -f "$docker_dir/docker-compose.yml" $@
+}
+
+function odcrs {
+  main=${1:-oberd}
+  docker_config="$(dirname $OBERD_DIR)/oberd-docker/docker-compose.yml"
+  docker-compose -f "$docker_config" kill $main
+  docker-compose -f "$docker_config" rm -f $main
+  docker-compose -f "$docker_config" up -d $main
+}

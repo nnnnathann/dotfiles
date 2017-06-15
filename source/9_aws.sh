@@ -1,3 +1,21 @@
+function gitup_aws(){
+  local branch_name=`git rev-parse --symbolic-full-name --abbrev-ref HEAD`
+  git fetch origin
+  if [ "$#" != "0" ]; then
+    branch_name=$1
+    git checkout $branch_name
+  fi
+  git pull origin $branch_name
+}
+function gitpu_aws(){
+  local branch_name=`git rev-parse --symbolic-full-name --abbrev-ref HEAD`
+  if [ "$#" != "0" ]; then
+    branch_name=$1
+    git checkout $branch_name
+  fi
+  gitup_aws
+  git push origin $branch_name
+}
 # Usage:
 # 
 # Inside of a git project, use this script to deploy to AWS CodeDeploy.
@@ -22,7 +40,7 @@ function aws-push {
     echo "Invalid deploy target group"
     return
   fi
-  gitpu
+  gitpu_aws
   aws deploy create-deployment --application-name $app --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $deployGroup --github-location repository=$repository,commitId=$commitId
 }
 
@@ -32,6 +50,10 @@ function aws-medamine-deploy-current-commit {
 
 function aws-qa-deploy-current-commit {
   aws-push qa
+}
+
+function aws-mips-deploy-current-commit {
+  aws-push mips
 }
 
 # Usage:
@@ -48,7 +70,7 @@ function aws-qa-deploy-current-commit {
 # medamine2 = medamine-autoscale
 # qa = oberd-qa-autoscale
 # 
-function upload_oberd_file {
+function aws_upload_oberd_file {
 
 read -r -d '' USAGE << EOF
 
@@ -65,6 +87,7 @@ Group names for Oberd deploys:
 
 medamine2 = medamine-autoscale
 qa = oberd-qa-autoscale
+mips = oberd-mips-20170602
 
 EOF
 
@@ -96,7 +119,9 @@ EOF
   echo    # (optional) move to a new line
   if [[ $REPLY =~ ^[Yy]$ ]]
   then
+    for server in $servers; do
       scp -i ~/.ssh/oberd.pem "$file" "ec2-user@$server:/var/www/oberd/$2"
+    done
   fi
   echo "Copied files successfully."
 }

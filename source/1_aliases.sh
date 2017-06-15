@@ -10,6 +10,10 @@ function subl {
   /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl
 }
 
+function vsc {
+  /Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron
+}
+
 function composer {
   docker run -it --rm --privileged --memory "4g" -v ~/.dotfiles/caches/composer:/composer_cache -v ~/.dotfiles/caches/composer_home:/composer_home -v $(pwd):/working -w /working -e COMPOSER_CACHE_DIR=/composer_cache -e COMPOSER_HOME=/composer_home oberd/composer "$@"
 }
