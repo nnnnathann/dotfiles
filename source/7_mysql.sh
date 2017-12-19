@@ -15,6 +15,12 @@ function mysqldump_container {
   docker run -it --rm $MYSQL_ENV_VARS --link=$container:db -v $(pwd):/working -w /working oberd/mysql-dump $@
 }
 
+function mysqldump {
+  container=$1
+  shift
+  docker run -it --rm $MYSQL_ENV_VARS --link=$container:db -v $(pwd):/working -w /working oberd/mysql-dump $@
+}
+
 # Usage:
 #   mysql_import [container_name] [database_schema] [file]
 

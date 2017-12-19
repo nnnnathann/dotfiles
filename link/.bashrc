@@ -35,3 +35,10 @@ export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="~/bin:$PATH"
 export PATH="$HOME/.yarn/bin:$PATH"
 export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[ -f /Users/nathan/development/github.com/oberd/qa/chromeless/serverless/node_modules/tabtab/.completions/serverless.bash ] && . /Users/nathan/development/github.com/oberd/qa/chromeless/serverless/node_modules/tabtab/.completions/serverless.bash
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[ -f /Users/nathan/development/github.com/oberd/qa/chromeless/serverless/node_modules/tabtab/.completions/sls.bash ] && . /Users/nathan/development/github.com/oberd/qa/chromeless/serverless/node_modules/tabtab/.completions/sls.bash

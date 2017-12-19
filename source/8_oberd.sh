@@ -44,13 +44,13 @@ function oberd_browser_single {
 }
 
 function odc {
-  docker_dir="$(dirname $OBERD_DIR)/oberd-docker"
+  docker_dir="$(dirname $OBERD_DIR)/docker"
   docker-compose -f "$docker_dir/docker-compose.yml" $@
 }
 
 function odcrs {
   main=${1:-oberd}
-  docker_config="$(dirname $OBERD_DIR)/oberd-docker/docker-compose.yml"
+  docker_config="$(dirname $OBERD_DIR)/docker/docker-compose.yml"
   docker-compose -f "$docker_config" kill $main
   docker-compose -f "$docker_config" rm -f $main
   docker-compose -f "$docker_config" up -d $main

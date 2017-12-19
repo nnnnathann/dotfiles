@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Git Log</title>
+    <style>
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+      background: #e0e0e0;
+    }
+    table {
+      width: 100%;
+      background: white;
+    }
+    table th {
+      padding: 7px 0;
+    }
+    table td {
+      padding: 3px 7px;
+      text-align: center;
+    }
+    table tr:nth-child(even) td {
+      background: #f7f7f7;
+    }
+    </style>
+  </head>
+  <body>
+    <h1>Branch Work History and Breakdown </h1>
+    <h3><span id="branch-name"></span></h3>
+    <div id="heatmap"></div>
+    <div id="author-breakdown"></div>
+    <script type="text/template" id="author-breakdown-template" style="display: none;">
+      <table cellspacing="0" cellpadding="0">
+        <thead>
+          <tr>
+            <th>Author</th>
+            <th>Commit Count</th>
+            <th>Days</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% _.each(authors, function(author) { %>
+          <tr>
+            <td><%= author.name %></td>
+            <td><%= author.count %></td>
+            <td><%= author.days %></td>
+          </tr>
+        <% }); %>
+          <tr>
+            <td><span style="font-weight: bold;">Total</span></td>
+            <td><%= totalCommits %></td>
+            <td><%= totalDays %> (<%= Math.floor(totalDays / 5) + ' weeks' %>)</td>
+          </tr>
+        </tbody>
+      </table>
+    </script>

@@ -81,7 +81,7 @@ function clean_github(){
   merged=$(git branch -a --merged master | grep "remotes/origin" | cut -f3-100 -d'/')
   if [ -z "$1" ]; then
     for b in $merged; do
-      if [ "$b" != "master" && "$b" != "develop" ]; then
+      if [[ "$b" != "master"  && "$b" != "develop" ]]; then
         echo "will delete $b on github"
       fi
     done
@@ -92,7 +92,7 @@ function clean_github(){
     esac
   else
     for b in $merged; do
-      if [ "$b" != "master" && "$b" != "develop" ]; then
+      if [[ "$b" != "master"  && "$b" != "develop" ]]; then
         git push origin :$b
         echo "deleted $b on github"
       fi
@@ -240,4 +240,24 @@ function create_oberd_release {
   for branch in $branches; do
     echo "git merge $branch"
   done
+}
+
+function git_log_calendar {
+  if [ "$#" -ne 1 ]; then
+      echo "usage: git_log_calendar [base_branch]"
+      return
+  fi
+  TMP_PATH=/tmp/git_log_calendar.html
+  SOURCE_HEADER="$HOME/.dotfiles/libs/git_log_calendar/header.html"
+  SOURCE_FOOTER="$HOME/.dotfiles/libs/git_log_calendar/footer.html"
+  cat "$SOURCE_HEADER" > "$TMP_PATH"
+  local branch_name=`git rev-parse --symbolic-full-name --abbrev-ref HEAD`
+  local output=$(git log --pretty='format:{ "date":"%ad", "author":"%an" },' --date=short $branch_name ^$1 --no-merges --reverse)
+  echo "<div id='git-base-branch' style='display:none;'>$base_branch</div>" >> "$TMP_PATH"
+  echo "<div id='git-target-branch' style='display:none;'>$branch_name</div>" >> "$TMP_PATH"
+  echo "<div id='git-output' style='display:none;'>$output</div>" >> "$TMP_PATH"
+  cat "$SOURCE_FOOTER" >> "$TMP_PATH"
+  echo "wkhtmltoimage --javascript-delay 5000 \"file://$TMP_PATH\" \"$HOME/Desktop/git_log_calendar.jpg\""
+  wkhtmltoimage "file://$TMP_PATH" "$HOME/Desktop/git_log_calendar.jpg"
+  open "$HOME/Desktop/git_log_calendar.jpg"
 }

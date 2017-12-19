@@ -33,6 +33,5 @@ EOF
 }
 
 function vpn() {
-	PASSWORD=$(vault_read "vpn_setup" "password" | tr -d '\n')
-	vpn-connect $PASSWORD
+	vault_read "vpn2" "password" | tr -d '\n' | pbcopy
 }
