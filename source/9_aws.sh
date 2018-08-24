@@ -17,11 +17,11 @@ function gitpu_aws(){
   git push origin $branch_name
 }
 # Usage:
-# 
+#
 # Inside of a git project, use this script to deploy to AWS CodeDeploy.
-# 
+#
 # aws-push [deploy-group] [repository] [application-name]
-# 
+#
 function aws-push {
   branch="$(git rev-parse --abbrev-ref HEAD)"
   commitId="$(git rev-parse HEAD)"
@@ -92,7 +92,7 @@ function aws-mips-production-deploy-current-commit {
 
 # medamine2 = medamine-autoscale
 # qa = oberd-qa-autoscale
-# 
+#
 function aws_upload_oberd_file {
 
 read -r -d '' USAGE << EOF
@@ -150,19 +150,19 @@ EOF
 }
 
 # Usage:
-# upload_oberd_file [autoscale-group] [oberd_relative_filepath]
+# aws_run_command [autoscale-group] [oberd_relative_filepath]
 
 # Example:
-# upload_oberd_file medamine-autoscale business/Session.php
+# aws_run_command medamine-autoscale ls /tmp/mips_cron
 
-# Will upload a file to all the servers currently in the
-# medamine-autoscale groupName in AWS
+# Will list out commands to run
 
 # Group names for Oberd deploys:
 
 # medamine2 = medamine-autoscale
 # qa = oberd-qa-autoscale
-# 
+# mips = oberd-mips-20170602
+#
 function aws_run_command {
 
 read -r -d '' USAGE << EOF
