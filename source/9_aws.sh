@@ -150,7 +150,7 @@ EOF
 }
 
 # Usage:
-# aws_run_command [autoscale-group] [oberd_relative_filepath]
+# aws_run_command [autoscale-group] [command]
 
 # Example:
 # aws_run_command medamine-autoscale ls /tmp/mips_cron
