@@ -3,7 +3,7 @@
 function docker_alias {
 	img=$1
 	shift
-	docker run -it --rm -v $(pwd):/working -w /working $img $@
+	docker run -it --rm -v "$(pwd)":/working -w /working $img $@
 }
 
 function subl {
@@ -14,8 +14,16 @@ function vsc {
   /Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron
 }
 
-function composer {
+function php5-composer {
   docker run -it --rm --privileged --memory "4g" -v ~/.dotfiles/caches/composer:/composer_cache -v ~/.dotfiles/caches/composer_home:/composer_home -v $(pwd):/working -w /working -e COMPOSER_CACHE_DIR=/composer_cache -e COMPOSER_HOME=/composer_home oberd/composer "$@"
+}
+
+function php7-composer {
+  docker run -it --rm --privileged --memory "4g" -v ~/.dotfiles/caches/composer:/composer_cache -v ~/.dotfiles/caches/composer_home:/composer_home -v $(pwd):/working -w /working -e COMPOSER_CACHE_DIR=/composer_cache -e COMPOSER_HOME=/composer_home oberd/php7-composer "$@"
+}
+
+function composer {
+  php7-composer "$@"
 }
 
 function convert {
@@ -109,3 +117,5 @@ alias watch_cpanel="compass watch --sass-dir cpanel_public/pages/css/routed/scss
 alias oberd_bash="docker exec -it oberd_web_1 /bin/bash"
 
 alias npm_patch='VERSION=$(npm version patch) && npm publish && git push origin $VERSION'
+
+alias phplint="docker run --rm -v $PWD:/app 269976911723.dkr.ecr.us-west-2.amazonaws.com/oberd/analyzers-php"

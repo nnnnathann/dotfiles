@@ -334,3 +334,8 @@ function aws_upload_oberd_changes {
     aws_upload_oberd_file "$@" $f
   done
 }
+
+function awsmm_last_deploy {
+	deploy_id=$(aws deploy list-deployments --application-name oberd --deployment-group medamine2 --max-items 1 | grep DEPLOYMENTS | awk '{ print $2}')
+	echo "Check status: https://us-west-2.console.aws.amazon.com/codedeploy/home?region=us-west-2#/deployments/$deploy_id"
+}

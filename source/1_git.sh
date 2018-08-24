@@ -37,13 +37,13 @@ alias gs-all='eachdir git status'
 # Removes all local branches that
 # have already been merged into master
 # (will preview, with confirmation)
-# 
+#
 # Example:
 #   $> clean_local
 #   will delete hotfix/1.1.36c
 #   Continue (y/n)? y
 #   deleted hotfix/1.1.36c
-#   
+#
 function clean_local(){
   dead=`git branch --merged master | grep "^[^*]"`
   if [ -z "$1" ]; then
@@ -53,7 +53,7 @@ function clean_local(){
       fi
     done
     read -p "Continue (y/n)? " choice
-    case "$choice" in 
+    case "$choice" in
       y|Y ) clean_local "yes";;
       * ) exit 0;;
     esac
@@ -69,13 +69,13 @@ function clean_local(){
 # Removes all remote branches that
 # have already been merged into master
 # (will preview, with confirmation)
-# 
+#
 # Example:
 #   $> clean_github
 #   will delete hotfix/1.1.36c on github
 #   Continue (y/n)? y
 #   deleted hotfix/1.1.36c on github
-#   
+#
 function clean_github(){
   git remote prune origin
   merged=$(git branch -a --merged master | grep "remotes/origin" | cut -f3-100 -d'/')
@@ -86,7 +86,7 @@ function clean_github(){
       fi
     done
     read -p "Continue (y/n)? " choice
-    case "$choice" in 
+    case "$choice" in
       y|Y ) clean_github "yes";;
       * ) exit 0;;
     esac
@@ -102,16 +102,16 @@ function clean_github(){
 
 # Update local branch with origin, checkout
 # if necessary
-# 
+#
 # Parameters:
 #   [branchname] (optional) name of branch to update
-# 
+#
 # Examples:
 #   $ (release/1.1.36): gitup
 #     -> will git pull release/1.1.36
 #   $ (release/1.1.36): gitup develop
 #     -> will checkout and pull develop
-#     
+#
 function gitup(){
   local branch_name=`git rev-parse --symbolic-full-name --abbrev-ref HEAD`
   git fetch origin
@@ -124,7 +124,7 @@ function gitup(){
 
 # Push local branch to matching branch,
 # without relying on remote tracking conf
-# 
+#
 # Examples:
 #   $ (develop): gitpu
 #     -> will update and push develop to origin
@@ -261,3 +261,29 @@ function git_log_calendar {
   wkhtmltoimage "file://$TMP_PATH" "$HOME/Desktop/git_log_calendar.jpg"
   open "$HOME/Desktop/git_log_calendar.jpg"
 }
+
+# Pass this pull request numbers and it will
+# merge them to develop
+function mergedev {
+  if [ "$#" -eq 0 ]; then
+    echo "usage: mergedev [pull request number] [pull request number]..."
+    return
+  fi
+  pr_number=$@
+  gitup develop
+  for num in $pr_number; do
+    branch=$(get_pr_branch $num | awk '{ print $2}')
+    if [[ ! -z "$branch" ]]; then
+      echo "Updating $branch"
+      gitup $branch
+      echo "Merging $branch to develop"
+      gitup develop
+      git merge "$branch"
+      if [ ! $? -eq 0 ]; then
+          echo "Error with branch $branch"
+          break
+      fi
+    fi
+  done
+}
+

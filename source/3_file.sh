@@ -39,3 +39,8 @@ alias eachdir=". eachdir"
 function md() {
   mkdir -p "$@" && cd "$@"
 }
+
+function join_to_commas {
+  pbpaste | sort -u | tr '\n' ', ' | sed 's/,*$//g'
+  echo ""
+}
